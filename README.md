@@ -10,6 +10,10 @@ University: Technische Universität Berlin
 
 Date Uploaded: 05-Aug-2024
 
+## Prerequisites
+
+All the required packages for running the scripts in a conda environment can be installed using **milp_wfo_environment.yml**
+
 ## Files
 
 **ml_wake_model.py** - Will create a training dataset and generate an ANN ML model to use with the wind farm optimization model**
