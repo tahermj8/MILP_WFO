@@ -1,5 +1,4 @@
-# MILP_WFO
-MILP-based Wind Farm Micrositing Optimization with ANN Wake Model
+# MILP-based Wind Farm Micrositing Optimization with ANN Wake Model
 
 Master's Thesis Project
 
