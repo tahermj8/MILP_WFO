@@ -23,3 +23,5 @@ All the required packages for running the scripts in a conda environment can be 
 This file can run independently as well to generate an ANN model as well and then perform wind farm layout micro-siting optimization.
 
 **examples/Models/test_model_wind.xlsx** - All user inputs can be defined here. Both scripts take this file as the default input file.
+
+Other two python scripts are supporting files and also need to be downloaded to support the main scripts. 
