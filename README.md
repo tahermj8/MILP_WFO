@@ -16,11 +16,11 @@ All the required packages for running the scripts in a conda environment can be 
 
 ## Files
 
-**ml_wake_model.py** - Will create a training dataset and generate an ANN ML model to use with the wind farm optimization model
+**ml_wake_model.py** - Create a training dataset and generate an ANN ML model to use with the wind farm optimization model
 
-**wind_farm_gurobi_opt.py** - Will perform a wind farm micro-siting optimization using the ANN model for wake effect prediction.
+**wind_farm_gurobi_opt.py** - Perform a wind farm micro-siting optimization using the ANN model for wake effect prediction.
 
-This file can run independently as well to generate an ANN model as well and then perform wind farm layout micro-siting optimization.
+_wind_farm_gurobi_opt.py_ can run independently as well to generate an ANN model as well and then perform wind farm layout micro-siting optimization.
 
 **examples/Models/test_model_wind.xlsx** - All user inputs can be defined here. Both scripts take this file as the default input file.
 
