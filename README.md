@@ -12,7 +12,7 @@ Date Uploaded: 05-Aug-2024
 
 ## Prerequisites
 
-All the required packages for running the scripts in a conda environment can be installed using **milp_wfo_environment.yml**
+All the required packages for running the scripts in a conda environment can be installed using **milp_wfo.yml**
 
 ## Files
 
