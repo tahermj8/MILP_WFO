@@ -2,9 +2,9 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt # type: ignore
 import numpy as np
+import os
 
-
-def model_analysis(model, data):
+def model_analysis(model, model_name, data):
     """
     This performs a fit and validation analysis for the provided model and dataset 
 
@@ -47,19 +47,35 @@ def model_analysis(model, data):
     test_mae = mean_absolute_error(y_test, y_pred)
     # Calculate mean absolute percentage error on the test set
     test_mape = mape(y_test, y_pred)
+    
+    model_name = model_name + "_analysis"
+    base_folder = os.path.join("data", "Trained ML models", "model_analysis")
+    new_folder_path = os.path.join(base_folder, model_name)
 
-    print("Mean Squared Error:", test_mse)
-    print("Mean Absolute Error:", test_mae)
-    print("Mean Absolute Percentage Error:", round(test_mape,2),'%')
-    print("Model Test Score:", test_score)
-    print("Mean of all RMSEs:", np.mean(rmse))
+    # Create the new folder inside the base folder
+    if not os.path.exists(new_folder_path):
+        os.makedirs(new_folder_path)
+    
+    results_file = os.path.join(new_folder_path, "results.txt")
+    
 
     # Create boxplot of RMSE values to see the range of errors between test and prediction values
-    boxplotmaker(rmse)
+    num_extreme_outliers = boxplotmaker(rmse, new_folder_path)
 
     # Create a scatter plot to compare test and prediction values
-    scatterplotmaker(y_test, y_pred)
+    scatterplotmaker(y_test, y_pred, new_folder_path)
 
+    with open(results_file, 'w') as f:
+        f.write(f"Mean Squared Error: {test_mse}\n")
+        f.write(f"Mean Absolute Error: {test_mae}\n")
+        f.write(f"Mean Absolute Percentage Error: {round(test_mape, 2)}%\n")
+        f.write(f"Model Test Score: {test_score}\n")
+        f.write(f"Mean of all RMSEs: {np.mean(rmse)}\n")
+        f.write(f"Total RMSE values (Validation set): {len(rmse)}\n")
+        f.write(f"Number of extreme outliers:, {num_extreme_outliers} ,{round(num_extreme_outliers/len(rmse)*100,1)}%")
+        
+    print(f"ML model analysis for {model_name} is stored in 'data/Trained ML models'")
+    
 def rmsecalc(y_test, y_pred):
     """
     This performs an rmse calculation for the test and prediction values passed to it
@@ -107,7 +123,7 @@ def mape(y_test, y_pred):
     
     return mean_mape
 
-def boxplotmaker(rmse):
+def boxplotmaker(rmse, new_folder_path):
     """
     Creates a box plot for a set of RMSE values passed to it. This gives us a visual understanding of the error variation between test and prediction values
 
@@ -133,11 +149,13 @@ def boxplotmaker(rmse):
     extreme_outliers = [value for value in rmse if value < lower_whisker_pos.min() or value > upper_whisker_pos.max()]
     num_extreme_outliers = len(extreme_outliers)
 
-    print("Total RMSE values (Validation set):", len(rmse))
-    print("Number of extreme outliers:", num_extreme_outliers, ',' ,round(num_extreme_outliers/len(rmse)*100,1),'%')
-    plt.show()
+    plot_path = os.path.join(new_folder_path, f'rmse_boxplot.png')
+    plt.savefig(plot_path)
+    plt.close()
 
-def scatterplotmaker(y_test, y_pred):
+    return num_extreme_outliers
+
+def scatterplotmaker(y_test, y_pred, new_folder_path):
     """
     Creates a scatter plot for the testing and predicted values of the target dataset. This gives us a visual understanding of the variation between the two datasets.
 
@@ -164,4 +182,6 @@ def scatterplotmaker(y_test, y_pred):
     plt.ylabel('Predicted Values')
     # plt.legend()
     plt.grid(True)
-    plt.show()
+    plot_path = os.path.join(new_folder_path, f'model_scatter.png')
+    plt.savefig(plot_path)
+    plt.close()

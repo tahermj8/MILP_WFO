@@ -3,6 +3,7 @@ import math
 import argparse
 import xml.etree.ElementTree as ET
 from py_wake.wind_turbines import WindTurbine
+import warnings
 
 def read_input_data():
     """
@@ -17,38 +18,34 @@ def read_input_data():
         # Create the parser
     parser = argparse.ArgumentParser()
 
+    warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
     # Add arguments
     parser.add_argument(
         '--file_path', 
         nargs='?',  # This makes the argument optional
-        default='examples/Models/test_model_wind.xlsx',  # Specify your default file path here
+        default='milp_wfo_model_params.xlsx',  # Specify your default file path here
         type=str, 
-        help='Path to the Excel file (default: test_model_wind.xlsx)'
+        help='Path to the Excel file (default: milp_wfo_model_params.xlsx)'
     )
 
     input_file_path = parser.parse_args().file_path
     # Read input file and store
     print(f'Reading input file {input_file_path}')
     input_file = pd.ExcelFile(input_file_path)
-
-    # Read the 'micrositing' sheet with all the input parameters
-    # basic_params = input_file.parse('training_data_params').fillna('').map(lambda x: x.strip() if type(x) == str else x).set_index('Parameter')
-    # ml_model_params = input_file.parse('ml_model_params').fillna('').map(lambda x: x.strip() if type(x) == str else x).set_index('Parameter')
-    # micrositing_opt = input_file.parse('micrositing_opt').fillna('').map(lambda x: x.strip() if type(x) == str else x).set_index('Parameter')
     
     # Assuming input_file is an ExcelFile object from pandas
 
     # Read and clean 'training_data_params' sheet
     basic_params = input_file.parse('training_data_params').fillna('')
-    basic_params = basic_params.applymap(lambda x: x.strip() if isinstance(x, str) else x).set_index('Parameter')
+    basic_params = basic_params.map(lambda x: x.strip() if isinstance(x, str) else x).set_index('Parameter')
 
     # Read and clean 'ml_model_params' sheet
     ml_model_params = input_file.parse('ml_model_params').fillna('')
-    ml_model_params = ml_model_params.applymap(lambda x: x.strip() if isinstance(x, str) else x).set_index('Parameter')
+    ml_model_params = ml_model_params.map(lambda x: x.strip() if isinstance(x, str) else x).set_index('Parameter')
 
     # Read and clean 'micrositing_opt' sheet
     micrositing_opt = input_file.parse('micrositing_opt').fillna('')
-    micrositing_opt = micrositing_opt.applymap(lambda x: x.strip() if isinstance(x, str) else x).set_index('Parameter')
+    micrositing_opt = micrositing_opt.map(lambda x: x.strip() if isinstance(x, str) else x).set_index('Parameter')
 
     
     # Storing all input data in a dictionary
@@ -131,7 +128,7 @@ def wtg_to_dict(turbine_model):
     model_dict = {'V80': 'Vestas V80 2 MW'}
 
     # Load the WTG(XML) file of the turbine
-    file_path = f'examples\Turbine Specs\{model_dict[turbine_model]}.wtg'
+    file_path = f'data/Turbine Specs/{model_dict[turbine_model]}.wtg'
     tree = ET.parse(file_path)
     root = tree.getroot()
     

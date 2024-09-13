@@ -48,9 +48,14 @@ def create_trained_ml_model(input_data):
 
     save_model = input_data['training_data_params'].loc['Save Trained Model as external file'].item()
     # Passing the training data with the empty ML pipeline to create a trained ML model
-    trained_model = ml_model_training(model_pipeline=model_pipeline, training_data=training_data, grid_size=grid_size, len_bin_arrays=len(binary_arrays), save_model=save_model)
+    trained_model, trained_model_filename = ml_model_training(model_pipeline=model_pipeline, training_data=training_data, grid_size=grid_size, len_bin_arrays=len(binary_arrays), save_model=save_model)
+    
+    # Perform analysis of the trained model 
+    perform_model_analysis = input_data['training_data_params'].loc['Perform model analysis'].item()
+    if perform_model_analysis:
+        model_analysis(model=trained_model, model_name=trained_model_filename, data=training_data_2)
 
-    return trained_model, training_data_2, model_pipeline
+    return trained_model, trained_model_filename, training_data_2, model_pipeline
 
 def binary_arrays_generator(input_data):
     """
@@ -283,8 +288,8 @@ def training_data_collection(input_data, turbine_data, binary_arrays, wind_farm_
     # Save the trained dataset as an external pkl file if required
     save_data = input_data.loc['Save Training Dataset as external file'].item()
     if save_data == True:
-        joblib.dump(data_df, f'training_data_{grid_size}T_{len(binary_arrays)}L_{len(wslist)}S_{len(wdlist)}D_{len(xDlist)}xD.pkl')
-        print(f'Training data extracted as "training_data_{grid_size}T_{len(binary_arrays)}L_{len(wslist)}S_{len(wdlist)}D_{len(xDlist)}xD.pkl"')
+        joblib.dump(data_df, f'data/Trained Datasets/training_data_{grid_size}T_{len(binary_arrays)}L_{len(wslist)}S_{len(wdlist)}D_{len(xDlist)}xD.pkl')
+        print(f'Training data extracted as "training_data_{grid_size}T_{len(binary_arrays)}L_{len(wslist)}S_{len(wdlist)}D_{len(xDlist)}xD.pkl" in data/Trained Datasets')
 
     return data_df
 
@@ -402,10 +407,13 @@ def ml_model_training(model_pipeline, training_data, grid_size, len_bin_arrays, 
         if save_model == True:
             hidden_layers = len(model_pipeline.named_steps['mlp'].hidden_layer_sizes)
             neurons = model_pipeline.named_steps['mlp'].hidden_layer_sizes[0]
-            joblib.dump(model_pipeline, f'trained_model_pipeline_{grid_size}T_{len_bin_arrays}L_{neurons}x{hidden_layers}.pkl')
-            print(f'Trained model extracted as "trained_model_pipeline_{grid_size}T_{len_bin_arrays}L_{neurons}x{hidden_layers}.pkl"')
-
-        return model_pipeline
+            joblib.dump(model_pipeline, f'data/Trained ML models/trained_model_pipeline_{grid_size}T_{len_bin_arrays}L_{neurons}x{hidden_layers}.pkl')
+            print(f'Trained model extracted as "trained_model_pipeline_{grid_size}T_{len_bin_arrays}L_{neurons}x{hidden_layers}.pkl" in data/Trained ML models')
+            model_filename = f'trained_model_pipeline_{grid_size}T_{len_bin_arrays}L_{neurons}x{hidden_layers}'
+        else:
+            model_filename = None
+            
+        return model_pipeline, model_filename
 
 def main():
     """
@@ -421,12 +429,7 @@ def main():
     input_data, _ = read_input_data()
 
     # Send the processed data to create a trained ML model based on provided user inputs. Also extract the training dataset and the untrained ML model for model evaluation
-    trained_model, training_data, model_pipeline = create_trained_ml_model(input_data)
-
-    # Perform analysis of the trained model 
-    perform_model_analysis = input_data['training_data_params'].loc['Perform model analysis'].item()
-    if perform_model_analysis:
-        model_analysis(model=model_pipeline, data=training_data)
+    trained_model, model_filename, training_data, model_pipeline = create_trained_ml_model(input_data)
 
 if __name__ == "__main__":
     main()

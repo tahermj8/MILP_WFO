@@ -55,11 +55,11 @@ def create_micrositing_gurobi_model(input_data, trained_ML_model_import, input_f
     # Creates or Imports a trained wake ML model to use with the optimization model 
     if trained_ML_model_import == '':
         # Calls the function form the ml_wake_model.py
-        trained_model, _, _ = create_trained_ml_model(input_data)
+        trained_model, _, _, _ = create_trained_ml_model(input_data)
     else:
         # Importing an existing trained model instead from folder 'Trained ML models' 
-        print('Importing trained ML Model')
-        trained_model = joblib.load(f'examples/Trained ML models/{trained_ML_model_import}.pkl')
+        print(f'Importing trained ML Model {trained_ML_model_import}')
+        trained_model = joblib.load(f'data/Trained ML models/{trained_ML_model_import}.pkl')
 
     # Generates coordinates based on turbine diameter and inte-turbine distance factor
     coordinates = generate_coordinates(D=D, xD=xD, grid_size=n_turbs)
@@ -157,8 +157,8 @@ def create_micrositing_gurobi_model(input_data, trained_ML_model_import, input_f
     # Option to extract Unoptimized Gurobi Model
     extract_model_unopt = input_data['micrositing_opt'].loc['Extract Gurobi Model (Unoptimized)'].item()
     if extract_model_unopt:
-        grb_mdl.write(f"gurobi_model_unopt_{timestamp}.lp")
-
+        grb_mdl.write(f"{output_folder}/gurobi_model_unopt_{timestamp}.lp")
+        
     grb_mdl.setParam('LogFile', f'{output_folder}/LogFile_{timestamp}')
     
 
@@ -198,7 +198,7 @@ def solve_gurobi_model(grb_mdl, solution_import):
     else:
         # Load an existing solution file and store in the existing model
         print('Importing Existing Gurobi Solution')
-        sol_file = f'examples/Gurobi Solutions/{solution_import}.sol'
+        sol_file = f'data/Gurobi Solutions/{solution_import}.sol'
         # Setting optimization time to 0 as existing solution was loaded
         elapsed_time_str = time.strftime('%H:%M:%S', time.gmtime(0))
 

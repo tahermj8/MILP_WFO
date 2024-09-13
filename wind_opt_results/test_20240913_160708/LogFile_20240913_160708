@@ -1,0 +1,61 @@
+
+Gurobi 11.0.3 (win64) logging started Fri Sep 13 16:07:09 2024
+
+Set parameter LogFile to value "wind_opt_results\test_20240913_160708/LogFile_20240913_160708"
+Gurobi Optimizer version 11.0.3 build v11.0.3rc0 (win64 - Windows 11+.0 (26100.2))
+
+CPU model: 11th Gen Intel(R) Core(TM) i5-1135G7 @ 2.40GHz, instruction set [SSE2|AVX|AVX2|AVX512]
+Thread count: 4 physical cores, 8 logical processors, using up to 8 threads
+
+Optimize a model with 2584 rows, 4835 columns and 182358 nonzeros
+Model fingerprint: 0x3d67e572
+Model has 9 quadratic objective terms
+Model has 2313 general constraints
+Variable types: 4826 continuous, 9 integer (9 binary)
+Coefficient statistics:
+  Matrix range     [1e-08, 1e+03]
+  Objective range  [0e+00, 0e+00]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 5e+01]
+  RHS range        [2e-03, 5e+02]
+  PWLCon x range   [0e+00, 3e+01]
+  PWLCon y range   [0e+00, 2e+00]
+Presolve added 4311 rows and 1510 columns
+Presolve time: 1.75s
+Presolved: 6904 rows, 6354 columns, 173862 nonzeros
+Variable types: 4536 continuous, 1818 integer (1818 binary)
+
+Root relaxation: objective 7.776000e+00, 5299 iterations, 1.38 seconds (2.21 work units)
+Total elapsed time = 6.83s (DegenMoves)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    7.77600    0  275          -    7.77600      -     -    7s
+     0     0    7.77600    0  305          -    7.77600      -     -   11s
+H    0     0                       6.6627611    7.77600  16.7%     -   13s
+     0     0    7.77600    0  329    6.66276    7.77600  16.7%     -   13s
+H    0     0                       7.0666138    7.77600  10.0%     -   24s
+     0     0    7.77600    0  120    7.06661    7.77600  10.0%     -   27s
+H    0     0                       7.1669669    7.77600  8.50%     -   29s
+     0     0    7.77600    0  155    7.16697    7.77600  8.50%     -   29s
+
+Cutting planes:
+  Cover: 16
+  Implied bound: 150
+  Clique: 58
+  MIR: 82
+  Flow cover: 137
+  GUB cover: 1
+  RLT: 25
+  Relax-and-lift: 85
+  BQP: 11
+  PSD: 3
+
+Explored 1 nodes (41739 simplex iterations) in 29.22 seconds (38.88 work units)
+Thread count was 8 (of 8 available processors)
+
+Solution count 3: 7.16697 7.06661 6.66276 
+
+Optimal solution found (tolerance 1.00e-01)
+Best objective 7.166966897774e+00, best bound 7.776000000000e+00, gap 8.4978%
