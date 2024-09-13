@@ -2,6 +2,8 @@
 
 ## Master's Thesis Project
 
+This project combines Mixed-Integer Linear Programming (MILP) and an ANN-based wake model to optimize wind farm layouts.
+
 Created By: **Taher Muhammedali**
 
 Program: MSc. in Process, Energy & Environmental Systems Engineering 2022
@@ -10,18 +12,41 @@ University: Technische Universität Berlin
 
 Date Uploaded: 05-Aug-2024
 
-## Prerequisites
+## Features
+- Wind farm micrositing optimization using MILP
+- ANN wake model for wake effect prediction
 
-All the required packages for running the scripts in a conda environment can be installed using **milp_wfo.yml**
+## Installation
 
-## Files
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/tahermj8/MILP_WFO.git
+   ```
 
-**ml_wake_model.py** - Create a training dataset and generate an ANN ML model to use with the wind farm optimization model
+2. Create a conda environment using the YAML file:
+   ```bash
+   conda env create -f milp_wfo.yml
+   ```
 
-**wind_farm_gurobi_opt.py** - Perform a wind farm micro-siting optimization using the ANN model for wake effect prediction.
+3. Activate the environment:
+   ```bash
+   conda activate milp_wfo
+   ```
 
-_wind_farm_gurobi_opt.py_ can run independently as well to generate an ANN model as well and then perform wind farm layout micro-siting optimization.
+## Usage
+To run the wind farm optimization:
+```bash
+wind_farm_gurobi_opt.py
+```
 
-**examples/Models/test_model_wind.xlsx** - All user inputs can be defined here. Both scripts take this file as the default input file.
+Ensure that Gurobi is correctly licensed before running the model.
 
-Other two python scripts are supporting files and also need to be downloaded to support the main scripts. 
+## Example
+Some examples are given in `wind_opt_results/`.
+
+## Project Structure
+- `wind_farm_gurobi_opt.py`: Main optimization script
+- `ml_wake_model.py`: Script to create a ML model for wake prediction.
+- `milp_wfo_model_params.xlsx`: Input parameters file
+- `data/`: Pre-trained ML models and other data files
+- `wind_opt_results/`: Outputs and visualizations
